@@ -1,0 +1,8 @@
+Testing connection to: mongodb+srv:****@chatapp.rsl9tqe.mongodb.net/
+Connection failed: querySrv ECONNREFUSED _mongodb._tcp.chatapp.rsl9tqe.mongodb.net
+Error: querySrv ECONNREFUSED _mongodb._tcp.chatapp.rsl9tqe.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
+Testing connection to: mongodb+srv:****@chatapp.rsl9tqe.mongodb.net/
+Connection failed: querySrv ECONNREFUSED _mongodb._tcp.chatapp.rsl9tqe.mongodb.net
+Error: querySrv ECONNREFUSED _mongodb._tcp.chatapp.rsl9tqe.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
