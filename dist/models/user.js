@@ -45,19 +45,21 @@ const userSchema = new Schema({
     timestamps: true, // Automatically creates createdAt and updatedAt
 });
 // 3. Pre-save hook: Hash password before saving to Node.js / MongoDB
-// userSchema.pre<IUser>('save', async function () {
-//     if (!this.isModified('password')) return;
-//     try {
-//         const salt = await bcrypt.genSalt(10);
-//         this.password = await bcrypt.hash(this.password!, salt);
-//     } catch (error: any) {
-//         console.error(error);
-//     }
-// });
+userSchema.pre('save', async function () {
+    if (!this.isModified('password'))
+        return;
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 // 4. Method to compare passwords (used during login)
-// userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
-//     return await bcrypt.compare(password, this.password || '');
-// };
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password || '');
+};
 // 5. Create and export the model
 const User = mongoose.model('User', userSchema);
 export default User;

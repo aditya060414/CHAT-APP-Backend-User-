@@ -20,7 +20,6 @@ export const LoginUser = TryCatch(async (req, res) => {
     }
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    console.log("Generated OTP:", otp, "Length:", otp.length);
 
     const otpKey = `otp:${email}`;
     await redisClient.set(otpKey, otp, {
@@ -44,7 +43,6 @@ export const LoginUser = TryCatch(async (req, res) => {
 
 export const verifyUser = TryCatch(async (req, res) => {
     const { email, otp: enteredOtp } = req.body;
-    console.log(email, enteredOtp);
 
     if (!email || !enteredOtp) {
         return res.status(400).json({
