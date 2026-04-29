@@ -8,5 +8,5 @@ router.post("/verify", verifyUser);
 router.get("/userProfile", Auth, userProfile);
 router.post("/update", Auth, updateName);
 router.get("/all", Auth, getUsers)
-router.get("/:id", getAUser)
+router.get("/me",Auth, getAUser)
 export default router;
