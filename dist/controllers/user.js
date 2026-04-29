@@ -11,7 +11,7 @@ export const LoginUser = TryCatch(async (req, res) => {
     if (rateLimit) {
         return res.status(429).json({
             message: "Too many requests, please try again later",
-            success: false
+            success: false,
         });
     }
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -20,31 +20,31 @@ export const LoginUser = TryCatch(async (req, res) => {
         EX: 300,
     });
     await redisClient.set(rateLimitKey, "true", {
-        EX: 60
+        EX: 60,
     });
     const message = {
         to: email,
         subject: "Your OTP Code",
-        body: `Your OTP Code is ${otp}. This OTP will expire in 5 minutes.`
+        body: `Your OTP Code is ${otp}. This OTP will expire in 5 minutes.`,
     };
     await publishToQueue("send-otp", message);
     return res.status(200).json({
         message: "OTP sent successfully",
-        success: true
+        success: true,
     });
 });
 export const verifyUser = TryCatch(async (req, res) => {
     const { email, otp: enteredOtp } = req.body;
     if (!email || !enteredOtp) {
         return res.status(400).json({
-            message: "Invalid email or OTP"
+            message: "Invalid email or OTP",
         });
     }
     const otpkey = `otp:${email}`;
     const storedOtp = await redisClient.get(otpkey);
     if (!storedOtp || storedOtp !== enteredOtp) {
         return res.status(400).json({
-            message: "Invalid OTP"
+            message: "Invalid OTP",
         });
     }
     await redisClient.del(otpkey);
@@ -90,12 +90,15 @@ export const updateName = TryCatch(async (req, res) => {
 export const getUsers = TryCatch(async (req, res) => {
     const users = await User.find();
     res.json({
-        users
+        users,
     });
 });
 export const getAUser = TryCatch(async (req, res) => {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    const id = req.user?._id;
+    if (!id) {
+        return res.status(401).json({ message: "User not verified" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(id.toString())) {
         return res.status(400).json({ message: "Invalid user ID" });
     }
     const user = await User.findById(id);
