@@ -135,3 +135,19 @@ export const getAUser = TryCatch(async (req: AuthenticatedRequest, res) => {
 
   res.json({ user });
 });
+
+export const getUserById = TryCatch(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id || typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json({ user });
+});
